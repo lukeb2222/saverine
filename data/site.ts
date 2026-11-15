@@ -50,7 +50,7 @@ export const site = {
     listId: "TL7SpD",
   },
 
-  contactEmail: "hello@saverine.com",
+  contactEmail: "hello@saverine.shop",
   social: {
     instagram: "https://instagram.com/", // TODO: add your handle
     tiktok: "https://tiktok.com/", // TODO: add your handle
