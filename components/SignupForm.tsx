@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { site } from "@/data/site";
 
 /**
  * Where signups are sent. The built-in /api/subscribe route needs a server,
@@ -10,6 +11,32 @@ import { useState } from "react";
 const ENDPOINT =
   process.env.NEXT_PUBLIC_SIGNUP_ENDPOINT || (process.env.NEXT_PUBLIC_STATIC_EXPORT === "1" ? "" : "/api/subscribe");
 
+const KLAVIYO = site.klaviyo.companyId && site.klaviyo.listId ? site.klaviyo : null;
+
+/** Adds the address to the Klaviyo list straight from the browser (no server needed). */
+async function subscribeWithKlaviyo(email: string) {
+  const res = await fetch(`https://a.klaviyo.com/client/subscriptions/?company_id=${KLAVIYO!.companyId}`, {
+    method: "POST",
+    headers: { "content-type": "application/vnd.api+json", revision: "2025-10-15" },
+    body: JSON.stringify({
+      data: {
+        type: "subscription",
+        attributes: {
+          custom_source: "Website signup",
+          profile: {
+            data: {
+              type: "profile",
+              attributes: { email, subscriptions: { email: { marketing: { consent: "SUBSCRIBED" } } } },
+            },
+          },
+        },
+        relationships: { list: { data: { type: "list", id: KLAVIYO!.listId } } },
+      },
+    }),
+  });
+  if (!res.ok) throw new Error("We couldn't add you just now. Try again in a minute.");
+}
+
 export function SignupForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -18,6 +45,20 @@ export function SignupForm() {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
+    const email = String(data.get("email") ?? "").trim();
+    if (KLAVIYO) {
+      if (data.get("company")) return setStatus("done"); // honeypot
+      setStatus("sending");
+      try {
+        await subscribeWithKlaviyo(email);
+        setStatus("done");
+        form.reset();
+      } catch (err) {
+        setStatus("error");
+        setMessage(err instanceof Error ? err.message : "Something went wrong.");
+      }
+      return;
+    }
     if (!ENDPOINT) {
       setStatus("error");
       setMessage("Signups aren't switched on yet. Check back soon.");

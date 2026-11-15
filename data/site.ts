@@ -39,6 +39,17 @@ export const site = {
   minimumPolicy:
     "Each colorway needs a minimum number of orders before our factory will make it. If yours doesn't get there, we'll email you and you choose: swap to another colorway or get a full refund.",
 
+  /**
+   * Email signups go to this Klaviyo list. Both values are public IDs (safe
+   * to commit). Site ID: Klaviyo → Settings → Account → API keys → "Public
+   * API key". List ID: Audience → Lists & segments → open the list →
+   * Settings.
+   */
+  klaviyo: {
+    companyId: "",
+    listId: "",
+  },
+
   contactEmail: "hello@saverine.com",
   social: {
     instagram: "https://instagram.com/", // TODO: add your handle
