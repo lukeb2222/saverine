@@ -30,9 +30,17 @@ export function Footer() {
         <Badge className="h-28 w-28 text-bone/90" />
       </div>
       <div className="border-t border-bone/15">
-        <p className="container-x py-5 text-xs text-bone/60">
-          © {site.copyrightYear} {site.name}. All preorders ship by {site.preorder.shipsBy}.
-        </p>
+        <div className="container-x flex flex-col gap-2 py-5 text-xs text-bone/60 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {site.copyrightYear} {site.name}. All preorders ship by {site.preorder.shipsBy}.
+          </p>
+          <p>
+            Site made by{" "}
+            <a href="https://webadi.digital" target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-gold">
+              Webadi
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
