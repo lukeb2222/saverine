@@ -46,7 +46,7 @@ export const site = {
    * Settings.
    */
   klaviyo: {
-    companyId: "",
+    companyId: "QUzqui",
     listId: "",
   },
 
