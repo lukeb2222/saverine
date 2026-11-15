@@ -24,7 +24,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
   const product = getProduct((await params).slug);
   if (!product) notFound();
 
-  const photo = product.colorways.find((c) => c.photo)?.photo;
+  const photo = product.colorways.find((c) => c.id === product.defaultColorway)?.images?.[0];
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",

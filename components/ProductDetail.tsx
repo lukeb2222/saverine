@@ -15,7 +15,7 @@ import { SizeChartTable } from "./SizeChartTable";
 import { Swatches } from "./Swatches";
 import type { MockupView } from "./Mockup";
 
-type Shot = { key: string; view: MockupView; photo: boolean; label: string };
+type Shot = { key: string; index: number; view: MockupView; label: string };
 
 export function ProductDetail({ product, initialColor }: { product: Product; initialColor?: string }) {
   const start = product.colorways.find((c) => c.id === initialColor)?.id ?? product.defaultColorway;
@@ -31,12 +31,14 @@ export function ProductDetail({ product, initialColor }: { product: Product; ini
   const drop1 = product.colorways.filter(isAvailable);
   const later = product.colorways.filter((c) => !isAvailable(c));
 
-  const shots: Shot[] = [
-    ...(colorway.photo ? [{ key: "photo", view: "front" as const, photo: true, label: "On body" }] : []),
-    { key: "front", view: "front", photo: false, label: "Front" },
-    ...(product.garment === "hoodie" ? [{ key: "back", view: "back" as const, photo: false, label: "Back" }] : []),
-    { key: "detail", view: "detail", photo: false, label: "Print detail" },
-  ];
+  const hasPhotos = Boolean(colorway.images?.length);
+  const shots: Shot[] = hasPhotos
+    ? colorway.images!.map((img, i) => ({ key: img.src, index: i, view: "front" as const, label: img.label }))
+    : [
+        { key: "front", index: 0, view: "front", label: "Front" },
+        ...(product.garment === "hoodie" ? [{ key: "back", index: 0, view: "back" as const, label: "Back" }] : []),
+        { key: "detail", index: 0, view: "detail", label: "Print detail" },
+      ];
   const current = shots[Math.min(shot, shots.length - 1)];
 
   function pickColor(id: string) {
@@ -60,7 +62,7 @@ export function ProductDetail({ product, initialColor }: { product: Product; ini
       <div className="lg:sticky lg:top-24 lg:self-start">
         <div className="aspect-[4/5] overflow-hidden rounded-[3px] bg-bone-deep">
           <div key={`${colorway.id}-${current.key}`} className="anim-fade h-full w-full">
-            <ProductVisual product={product} colorway={colorway} view={current.view} preferPhoto={current.photo} eager />
+            <ProductVisual product={product} colorway={colorway} index={current.index} mockupView={current.view} eager />
           </div>
         </div>
         <div className="mt-3 grid grid-cols-4 gap-3" role="group" aria-label="Product images">
@@ -75,13 +77,11 @@ export function ProductDetail({ product, initialColor }: { product: Product; ini
                 current.key === s.key ? "outline-2 outline-offset-2 outline-ink" : "opacity-80 hover:opacity-100"
               }`}
             >
-              <ProductVisual product={product} colorway={colorway} view={s.view} preferPhoto={s.photo} sizes="120px" />
+              <ProductVisual product={product} colorway={colorway} index={s.index} mockupView={s.view} sizes="120px" />
             </button>
           ))}
         </div>
-        {!colorway.photo || !current.photo ? (
-          <p className="mt-3 text-xs text-ink/60">Illustrated mockup. Product photos are on the way.</p>
-        ) : null}
+        {!hasPhotos && <p className="mt-3 text-xs text-ink/60">Illustrated mockup. Product photos are on the way.</p>}
       </div>
 
       {/* buy box */}

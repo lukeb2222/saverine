@@ -6,7 +6,6 @@ import { Badge, Wordmark } from "@/components/brand";
 import { Marquee } from "@/components/Marquee";
 import { ProductCard } from "@/components/ProductCard";
 import { RoughEdge } from "@/components/RoughEdge";
-import { CityScene, CoastScene, MountainScene } from "@/components/Scenes";
 import { SignupForm } from "@/components/SignupForm";
 
 const HERO = `${site.basePath}/images/good-days-tee-olive-tree.jpg`;
@@ -77,24 +76,19 @@ export default function Home() {
           <p className="mt-2 font-marker text-xl text-red">City · Coast · Mountain · Road</p>
           <ul className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
             {[
-              { label: "City", art: <CityScene /> },
-              { label: "Coast", art: <CoastScene /> },
-              { label: "Mountain", art: <MountainScene /> },
-              {
-                label: "Road",
-                art: (
-                  <Image
-                    src={HERO}
-                    alt="Good Days Tee on a desert road trip"
-                    fill
-                    sizes="(min-width: 768px) 25vw, 50vw"
-                    className="object-cover object-[50%_20%]"
-                  />
-                ),
-              },
+              { label: "City", src: "/images/tee-midnight-swell-model.jpg", alt: "Good Days Tee in Midnight Swell on a city street" },
+              { label: "Coast", src: "/images/hoodie-salt-flat-model-back.jpg", alt: "City to Coast Hoodie in Salt Flat on the beach, back print" },
+              { label: "Mountain", src: "/images/hoodie-olive-tree-model.jpg", alt: "City to Coast Hoodie in Olive Tree in the mountains" },
+              { label: "Road", src: "/images/good-days-tee-olive-tree.jpg", alt: "Good Days Tee in Olive Tree on a desert road trip" },
             ].map((t) => (
               <li key={t.label} className="reveal group relative aspect-[4/5] overflow-hidden rounded-[3px] bg-ink">
-                <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.06]">{t.art}</div>
+                <Image
+                  src={`${site.basePath}${t.src}`}
+                  alt={t.alt}
+                  fill
+                  sizes="(min-width: 768px) 25vw, 50vw"
+                  className="object-cover object-[50%_25%] transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/80 to-transparent p-4 pt-12">
                   <p className="h-display text-lg text-bone md:text-xl">{t.label}</p>
                 </div>

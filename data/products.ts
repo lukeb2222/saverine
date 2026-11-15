@@ -1,8 +1,10 @@
 /**
  * The catalog. Edit prices, names, colorways and copy here.
  *
- * To swap a mockup for a real photo: drop the file in /public/images and set
- * `photo` on that colorway (e.g. photo: "/images/good-days-tee-low-tide.jpg").
+ * Photos live in /public/images and are listed per colorway in `images`
+ * (first one is the main shot). To replace one, overwrite the file or change
+ * the list in tee() / hoodie() below. A colorway with no images falls back to
+ * a drawn SVG mockup.
  */
 
 export type Colorway = {
@@ -14,9 +16,11 @@ export type Colorway = {
    * later drops show as "coming soon" teasers. Change the number to move it.
    */
   drop?: number;
-  /** Real photo for this colorway. When missing, an SVG mockup is drawn. */
-  photo?: { src: string; width: number; height: number; alt: string };
+  /** Photos for this colorway, main shot first. When empty, an SVG mockup is drawn. */
+  images?: ProductImage[];
 };
+
+export type ProductImage = { src: string; width: number; height: number; alt: string; label: string };
 
 export type Garment = "tee" | "hoodie";
 
@@ -57,6 +61,41 @@ export const ALL_SIZES: string[] = (Object.keys(SIZES) as SizeGroup[]).flatMap((
   SIZES[g].map((s) => `${g} ${s}`),
 );
 
+const MODEL = { width: 820, height: 1024 };
+const FLAT = { width: 1024, height: 1280 };
+
+function tee(c: Colorway, extra: Partial<Colorway> = {}): Colorway {
+  const main: ProductImage =
+    c.id === "olive-tree"
+      ? {
+          src: "/images/good-days-tee-olive-tree.jpg",
+          width: 896,
+          height: 1200,
+          alt: "Good Days Tee in Olive Tree, worn on the tailgate of an old pickup on a desert highway",
+          label: "On body",
+        }
+      : { src: `/images/tee-${c.id}-model.jpg`, ...MODEL, alt: `Good Days Tee in ${c.name}, worn`, label: "On body" };
+  return {
+    ...c,
+    ...extra,
+    images: [main, { src: `/images/tee-${c.id}.jpg`, ...FLAT, alt: `Good Days Tee in ${c.name}, laid flat`, label: "Front" }],
+  };
+}
+
+function hoodie(c: Colorway, extra: Partial<Colorway> = {}): Colorway {
+  const n = `City to Coast Hoodie in ${c.name}`;
+  return {
+    ...c,
+    ...extra,
+    images: [
+      { src: `/images/hoodie-${c.id}-model.jpg`, ...MODEL, alt: `${n}, worn, front`, label: "On body" },
+      { src: `/images/hoodie-${c.id}-model-back.jpg`, ...MODEL, alt: `${n}, worn, back print`, label: "Back print" },
+      { src: `/images/hoodie-${c.id}-front.jpg`, ...FLAT, alt: `${n}, laid flat, front`, label: "Front" },
+      { src: `/images/hoodie-${c.id}-back.jpg`, ...FLAT, alt: `${n}, laid flat, back`, label: "Back" },
+    ],
+  };
+}
+
 export const products: Product[] = [
   {
     slug: "good-days-tee",
@@ -79,22 +118,14 @@ export const products: Product[] = [
     ],
     defaultColorway: "olive-tree",
     colorways: [
-      {
-        ...COLORS.oliveTree,
-        photo: {
-          src: "/images/good-days-tee-olive-tree.jpg",
-          width: 896,
-          height: 1200,
-          alt: "Good Days Tee in Olive Tree, worn on the tailgate of an old pickup on a desert highway",
-        },
-      },
-      COLORS.saltFlat,
-      COLORS.midnightSwell,
-      { ...COLORS.lowTide, drop: 2 },
-      { ...COLORS.goldenState, drop: 2 },
-      { ...COLORS.sunsetStrip, drop: 2 },
-      { ...COLORS.fogCity, drop: 2 },
-      { ...COLORS.powderDay, drop: 2 },
+      tee(COLORS.oliveTree),
+      tee(COLORS.saltFlat),
+      tee(COLORS.midnightSwell),
+      tee(COLORS.lowTide, { drop: 2 }),
+      tee(COLORS.goldenState, { drop: 2 }),
+      tee(COLORS.sunsetStrip, { drop: 2 }),
+      tee(COLORS.fogCity, { drop: 2 }),
+      tee(COLORS.powderDay, { drop: 2 }),
     ],
   },
   {
@@ -118,10 +149,10 @@ export const products: Product[] = [
     ],
     defaultColorway: "midnight-swell",
     colorways: [
-      COLORS.midnightSwell,
-      COLORS.saltFlat,
-      { ...COLORS.oliveTree, drop: 2 },
-      { ...COLORS.fogCity, drop: 2 },
+      hoodie(COLORS.midnightSwell),
+      hoodie(COLORS.saltFlat),
+      hoodie(COLORS.oliveTree, { drop: 2 }),
+      hoodie(COLORS.fogCity, { drop: 2 }),
     ],
   },
 ];

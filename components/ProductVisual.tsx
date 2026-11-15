@@ -3,42 +3,42 @@ import { site } from "@/data/site";
 import type { Colorway, Product } from "@/data/products";
 import { Mockup, type MockupView } from "./Mockup";
 
-/** A colorway's real photo when it has one, otherwise a tinted SVG mockup. */
+/** One of a colorway's photos (by index), or a tinted SVG mockup when it has none. */
 export function ProductVisual({
   product,
   colorway,
-  view = "front",
-  preferPhoto = true,
+  index = 0,
+  mockupView = "front",
   sizes = "(min-width: 1024px) 40vw, 100vw",
   eager = false,
 }: {
   product: Product;
   colorway: Colorway;
-  view?: MockupView;
-  preferPhoto?: boolean;
+  index?: number;
+  mockupView?: MockupView;
   sizes?: string;
   eager?: boolean;
 }) {
-  if (preferPhoto && colorway.photo && view === "front") {
+  const image = colorway.images?.[index] ?? colorway.images?.[0];
+  if (image) {
     return (
       <Image
-        src={`${site.basePath}${colorway.photo.src}`}
-        alt={colorway.photo.alt}
-        width={colorway.photo.width}
-        height={colorway.photo.height}
+        src={`${site.basePath}${image.src}`}
+        alt={image.alt}
+        width={image.width}
+        height={image.height}
         sizes={sizes}
         loading={eager ? "eager" : "lazy"}
         className="h-full w-full object-cover object-[50%_30%]"
       />
     );
   }
-  const viewLabel = view === "back" ? "back" : view === "detail" ? "print detail" : "front";
   return (
     <Mockup
       garment={product.garment}
       hex={colorway.hex}
-      view={view}
-      label={`${product.name} in ${colorway.name}, ${viewLabel} (illustrated mockup)`}
+      view={mockupView}
+      label={`${product.name} in ${colorway.name} (illustrated mockup)`}
       className="h-full w-full"
     />
   );
