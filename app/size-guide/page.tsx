@@ -6,6 +6,7 @@ import { SizeChartTable } from "@/components/SizeChartTable";
 export const metadata: Metadata = {
   title: "Size guide",
   description: "Youth and Adult size charts for the Good Days Tee and City to Coast Hoodie, in inches.",
+  alternates: { canonical: "/size-guide/" },
 };
 
 export default function SizeGuidePage() {

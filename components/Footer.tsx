@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site } from "@/data/site";
+import { site, socialLinks } from "@/data/site";
 import { Badge, Wordmark } from "./brand";
 import { RoughEdge } from "./RoughEdge";
 
@@ -22,8 +22,9 @@ export function Footer() {
         </nav>
         <nav aria-label="Social" className="flex flex-col gap-2 text-sm">
           <p className="eyebrow mb-2 text-gold">Follow</p>
-          <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-gold">Instagram</a>
-          <a href={site.social.tiktok} target="_blank" rel="noopener noreferrer" className="hover:text-gold">TikTok</a>
+          {socialLinks.map((l) => (
+            <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="hover:text-gold">{l.label}</a>
+          ))}
           <a href={`mailto:${site.contactEmail}`} className="hover:text-gold">{site.contactEmail}</a>
         </nav>
         <Badge className="h-28 w-28 text-bone/90" />

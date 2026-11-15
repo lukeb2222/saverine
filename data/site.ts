@@ -51,9 +51,19 @@ export const site = {
   },
 
   contactEmail: "hello@saverine.shop",
+  /**
+   * Full profile URLs, e.g. "https://www.instagram.com/yourhandle". Leave a
+   * value empty ("") until the account exists: empty links are hidden.
+   */
   social: {
-    instagram: "https://instagram.com/", // TODO: add your handle
-    tiktok: "https://tiktok.com/", // TODO: add your handle
-  },
+    instagram: "",
+    tiktok: "",
+  } as { instagram: string; tiktok: string },
   copyrightYear: 2026,
 } as const;
+
+/** Social profiles that have a real URL, in display order. */
+export const socialLinks = [
+  { label: "Instagram", href: site.social.instagram },
+  { label: "TikTok", href: site.social.tiktok },
+].filter((l) => l.href);

@@ -7,6 +7,7 @@ import { Accordion } from "@/components/Accordion";
 export const metadata: Metadata = {
   title: "FAQ",
   description: "How Saverine preorders work, when orders ship, refunds, sizing and care.",
+  alternates: { canonical: "/faq/" },
 };
 
 export default function FaqPage() {

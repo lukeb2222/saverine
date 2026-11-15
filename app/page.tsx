@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { products } from "@/data/products";
@@ -7,6 +8,8 @@ import { Marquee } from "@/components/Marquee";
 import { ProductCard } from "@/components/ProductCard";
 import { RoughEdge } from "@/components/RoughEdge";
 import { SignupForm } from "@/components/SignupForm";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const HERO = `${site.basePath}/images/good-days-tee-olive-tree.jpg`;
 
