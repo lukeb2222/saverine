@@ -3,6 +3,7 @@ import Link from "next/link";
 import { products } from "@/data/products";
 import { site } from "@/data/site";
 import { Badge, Wordmark } from "@/components/brand";
+import { Marquee } from "@/components/Marquee";
 import { ProductCard } from "@/components/ProductCard";
 import { RoughEdge } from "@/components/RoughEdge";
 import { CityScene, CoastScene, MountainScene } from "@/components/Scenes";
@@ -17,28 +18,28 @@ export default function Home() {
       <section className="relative isolate overflow-hidden bg-ink text-bone">
         <div className="grid min-h-[calc(100svh-6.5rem)] lg:grid-cols-[1.05fr_1fr]">
           {/* photo: full-bleed on mobile, right half on desktop */}
-          <div className="absolute inset-0 -z-10 lg:relative lg:order-2 lg:z-0">
+          <div className="absolute inset-0 -z-10 overflow-hidden lg:relative lg:order-2 lg:z-0">
             <Image
               src={HERO}
               alt="A friend laughing on the tailgate of an old pickup on a desert highway, wearing the Good Days Tee in Olive Tree"
               fill
               preload
               sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover object-[50%_22%]"
+              className="anim-settle object-cover object-[50%_22%]"
             />
             <div className="absolute inset-0 bg-[linear-gradient(to_top,#23211F_0%,#23211F_44%,transparent_70%)] lg:bg-[linear-gradient(to_right,#23211F_0%,transparent_45%)]" />
           </div>
 
           <div className="container-x flex flex-col justify-end pb-10 pt-[40svh] lg:order-1 lg:justify-center lg:py-20 lg:pl-[max(2.5rem,calc((100vw-78rem)/2+2.5rem))] lg:pr-10">
-            <p className="eyebrow text-gold">{site.preorder.dropName} · Preorder open</p>
+            <p className="eyebrow anim-rise text-gold">{site.preorder.dropName} · Preorder open</p>
             <h1 className="mt-4">
-              <Wordmark className="w-full max-w-[34rem]" />
-              <span className="h-display mt-4 block text-3xl sm:mt-5 sm:text-5xl">Good Days Only</span>
+              <Wordmark className="wordmark-draw w-full max-w-[34rem]" />
+              <span style={{ "--d": "900ms" } as React.CSSProperties} className="h-display anim-rise mt-4 block text-3xl sm:mt-5 sm:text-5xl">Good Days Only</span>
             </h1>
-            <p className="mt-4 hidden max-w-md text-lg text-bone/85 sm:block">
+            <p style={{ "--d": "1050ms" } as React.CSSProperties} className="anim-rise mt-4 hidden max-w-md text-lg text-bone/85 sm:block">
               Sun-faded, garment-dyed and very soft. Made for the coast, worn everywhere else too.
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-5 sm:mt-8">
+            <div style={{ "--d": "1200ms" } as React.CSSProperties} className="anim-rise mt-6 flex flex-wrap items-center gap-5 sm:mt-8">
               <Link href="/#drop" className="btn btn-red">
                 Preorder the first drop
               </Link>
@@ -46,12 +47,13 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <RoughEdge color="text-bone" position="bottom" />
-      </section>
+        </section>
+
+      <Marquee items={["Good Days Only", "City to Coast", "Est. 2026", "First drop: preorder now", "City · Coast · Mountain · Road"]} />
 
       {/* THE DROP */}
       <section id="drop" className="container-x py-16 md:py-24">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="reveal flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="eyebrow text-red">Drop 01 · Est. 2026</p>
             <h2 className="h-display mt-2 text-4xl md:text-5xl">The Drop</h2>
@@ -91,8 +93,8 @@ export default function Home() {
                 ),
               },
             ].map((t) => (
-              <li key={t.label} className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-ink">
-                {t.art}
+              <li key={t.label} className="reveal group relative aspect-[4/5] overflow-hidden rounded-[3px] bg-ink">
+                <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.06]">{t.art}</div>
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/80 to-transparent p-4 pt-12">
                   <p className="h-display text-lg text-bone md:text-xl">{t.label}</p>
                 </div>
@@ -105,7 +107,7 @@ export default function Home() {
       {/* STORY */}
       <section className="relative py-16 md:py-24">
         <RoughEdge color="text-bone-deep" variant={2} />
-        <div className="container-x grid items-center gap-10 md:grid-cols-[auto_1fr] md:gap-16">
+        <div className="reveal container-x grid items-center gap-10 md:grid-cols-[auto_1fr] md:gap-16">
           <Badge className="mx-auto h-44 w-44 text-ink md:h-56 md:w-56" sun="#B8483A" />
           <div className="max-w-2xl">
             <p className="eyebrow text-red">The story</p>
@@ -124,7 +126,7 @@ export default function Home() {
       {/* SIGNUP */}
       <section id="signup" className="relative bg-navy py-16 text-bone md:py-20">
         <RoughEdge color="text-bone" />
-        <div className="container-x flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
+        <div className="reveal container-x flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="h-display text-3xl md:text-4xl">Get first dibs on drop 2</h2>
             <p className="mt-3 max-w-md text-bone/80">

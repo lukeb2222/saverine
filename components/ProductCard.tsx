@@ -14,9 +14,9 @@ export function ProductCard({ product }: { product: Product }) {
   const available = isAvailable(colorway);
 
   return (
-    <article className="flex flex-col">
+    <article className="reveal flex flex-col">
       <Link href={href} className="group relative block aspect-[4/5] overflow-hidden rounded-[3px] bg-bone-deep" aria-label={`${product.name} in ${colorway.name}`}>
-        <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
+        <div key={colorway.id} className="anim-fade h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
           <ProductVisual product={product} colorway={colorway} sizes="(min-width: 768px) 45vw, 100vw" />
         </div>
         <span className="eyebrow absolute left-3 top-3 rounded-[2px] bg-ink px-2.5 py-1.5 text-[0.62rem] text-bone">

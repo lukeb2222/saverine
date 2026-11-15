@@ -45,8 +45,9 @@ export function WordmarkG({
         <path
           d="M58 124 C 62 119, 70 118, 84 117 C 190 111, 330 108, 462 104 C 470 103.6, 478 104.4, 480 107 C 481 110, 474 112.4, 466 113 C 340 117.5, 200 122, 92 128.6 C 80 129.4, 66 131.5, 60 129.6 C 56.5 128.4, 56 126, 58 124 Z"
           fill={slash}
+          className="wm-slash"
         />
-        <path d="M96 121.6 C 200 116, 320 113.4, 440 109.6" stroke={ink} strokeOpacity="0.12" strokeWidth="1" fill="none" />
+        <path d="M96 121.6 C 200 116, 320 113.4, 440 109.6" stroke={ink} strokeOpacity="0.12" strokeWidth="1" fill="none" className="wm-slash" />
       </g>
     </g>
   );
@@ -181,16 +182,18 @@ export function Badge({
       </defs>
       <circle cx="120" cy="120" r="114" fill="none" stroke={ink} strokeWidth="4" />
       <circle cx="120" cy="120" r="72" fill="none" stroke={ink} strokeWidth="2" />
-      <text fontSize="15.5" letterSpacing="3.2" fill={ink} style={DISPLAY}>
+      <g className="badge-spin">
+      <text fontSize="14" letterSpacing="2" fill={ink} style={DISPLAY}>
         <textPath href={`#${id}-top`} startOffset="50%" textAnchor="middle">
           CITY · COAST · MOUNTAIN
         </textPath>
       </text>
-      <text fontSize="13" letterSpacing="5" fill={ink} style={DISPLAY}>
+      <text fontSize="12.5" letterSpacing="4.5" fill={ink} style={DISPLAY}>
         <textPath href={`#${id}-bot`} startOffset="50%" textAnchor="middle">
-          GOOD DAYS ONLY · EST. 2026
+          GOOD DAYS ONLY
         </textPath>
       </text>
+      </g>
       <clipPath id={`${id}-clip`}>
         <circle cx="120" cy="120" r="70" />
       </clipPath>

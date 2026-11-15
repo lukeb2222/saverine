@@ -59,7 +59,9 @@ export function ProductDetail({ product, initialColor }: { product: Product; ini
       {/* gallery */}
       <div className="lg:sticky lg:top-24 lg:self-start">
         <div className="aspect-[4/5] overflow-hidden rounded-[3px] bg-bone-deep">
-          <ProductVisual product={product} colorway={colorway} view={current.view} preferPhoto={current.photo} eager />
+          <div key={`${colorway.id}-${current.key}`} className="anim-fade h-full w-full">
+            <ProductVisual product={product} colorway={colorway} view={current.view} preferPhoto={current.photo} eager />
+          </div>
         </div>
         <div className="mt-3 grid grid-cols-4 gap-3" role="group" aria-label="Product images">
           {shots.map((s, i) => (

@@ -134,3 +134,135 @@ details[open] > summary .acc-icon {
     animation-duration: 0.01ms !important;
   }
 }
+
+/* ---------- Motion ---------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes stamp {
+  from {
+    opacity: 0;
+    transform: scale(1.06) rotate(-1.5deg);
+  }
+}
+@keyframes wipe {
+  from {
+    clip-path: inset(-20% 100% -20% 0);
+  }
+  to {
+    clip-path: inset(-20% 0 -20% 0);
+  }
+}
+@keyframes settle {
+  from {
+    transform: scale(1.09);
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* on-load, staggered with --d */
+.anim-rise {
+  animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.anim-fade {
+  animation: fade 0.4s ease-out both;
+}
+.anim-settle {
+  animation: settle 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+/* hero wordmark: letters stamp in, then the red slash is drawn left to right */
+.wordmark-draw {
+  animation: stamp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s both;
+  transform-origin: 30% 60%;
+}
+.wordmark-draw .wm-slash {
+  animation: wipe 0.55s cubic-bezier(0.6, 0, 0.3, 1) 0.75s both;
+}
+
+/* scroll reveal: pure CSS; browsers without scroll timelines just show the content */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 45%;
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.badge-spin {
+  transform-origin: 120px 120px;
+  animation: spin 70s linear infinite;
+}
+
+/* cart drawer slides in from the right */
+dialog.drawer {
+  translate: 100% 0;
+  transition:
+    translate 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
+    display 0.32s allow-discrete,
+    overlay 0.32s allow-discrete;
+}
+dialog.drawer[open] {
+  translate: 0 0;
+}
+dialog.drawer::backdrop {
+  opacity: 0;
+  transition:
+    opacity 0.32s,
+    display 0.32s allow-discrete,
+    overlay 0.32s allow-discrete;
+}
+dialog.drawer[open]::backdrop {
+  opacity: 1;
+}
+@starting-style {
+  dialog.drawer[open] {
+    translate: 100% 0;
+  }
+  dialog.drawer[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .anim-rise,
+  .anim-fade,
+  .anim-settle,
+  .wordmark-draw,
+  .wordmark-draw .wm-slash,
+  .marquee-track,
+  .badge-spin {
+    animation: none;
+  }
+  dialog.drawer,
+  dialog.drawer::backdrop {
+    transition: none;
+  }
+}

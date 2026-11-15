@@ -27,7 +27,7 @@ export function CartDrawer() {
       onClose={close}
       onClick={(e) => e.target === ref.current && close()}
       aria-label="Your cart"
-      className="m-0 ml-auto h-dvh max-h-none w-full max-w-md bg-bone p-0 text-ink shadow-2xl backdrop:bg-ink/55"
+      className="drawer m-0 ml-auto h-dvh max-h-none w-full max-w-md bg-bone p-0 text-ink shadow-2xl backdrop:bg-ink/55"
     >
       <div className="flex h-full flex-col">
         <div className="flex items-center justify-between border-b-2 border-ink/10 px-5 py-4">
