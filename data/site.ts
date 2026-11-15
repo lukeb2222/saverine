@@ -47,7 +47,7 @@ export const site = {
    */
   klaviyo: {
     companyId: "QUzqui",
-    listId: "",
+    listId: "TL7SpD",
   },
 
   contactEmail: "hello@saverine.com",
