@@ -56,7 +56,7 @@ export const site = {
    * value empty ("") until the account exists: empty links are hidden.
    */
   social: {
-    instagram: "",
+    instagram: "https://www.instagram.com/wearsaverine/",
     tiktok: "",
   } as { instagram: string; tiktok: string },
   copyrightYear: 2026,
