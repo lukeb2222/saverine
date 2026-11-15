@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Saverine
 
-## Getting Started
-
-First, run the development server:
+Preorder site for Saverine — *Good Days Only, Est. 2026*. Next.js (App Router) + Tailwind CSS.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where to edit things
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| What | File |
+| --- | --- |
+| Preorder close date, ship month, shipping, refund text, socials, contact email | `data/site.ts` |
+| Products, prices, colorways, which drop a colorway is in, product photos | `data/products.ts` |
+| Size charts (inches) | `data/sizeGuide.ts` |
+| FAQ copy | `data/faq.ts` |
+| Wordmark, badge, back print (inline SVG) | `components/brand.tsx` |
+| Tee / hoodie mockups | `components/Mockup.tsx` |
 
-## Learn More
+**Real photos:** put the file in `public/images/` and set `photo` on that colorway in `data/products.ts`. The SVG mockup is replaced automatically.
 
-To learn more about Next.js, take a look at the following resources:
+**Drop 2 colorways:** colorways with `drop: 2` show as "coming in drop 2" and can't be added to the cart. Remove the flag (or raise `CURRENT_DROP`) to open them.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Not connected yet
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Checkout** shows "coming soon". The cart works and is saved in the browser. Shopify plugs in at `lib/checkout.ts` — the steps are written at the top of that file.
+- **Email signup** posts to `NEWSLETTER_WEBHOOK_URL` (see `.env.example`). Until that is set, signups are only accepted in `npm run dev` (logged to the terminal); the live site tells visitors signups aren't on yet rather than silently dropping them.
+- **Instagram / TikTok** links in `data/site.ts` are placeholders.
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Any Next.js host works (Vercel is the simplest). Set the variables from `.env.example`.

@@ -1,26 +1,136 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bone: #ece4d3;
+  --color-bone-deep: #e1d7c1;
+  --color-paper: #f7f2e6;
+  --color-ink: #23211f;
+  --color-red: #b8483a;
+  --color-red-deep: #9c3a2e;
+  --color-navy: #2e3b52;
+  --color-olive: #7a7a55;
+  --color-gold: #d6a84a;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo-black), "Arial Black", sans-serif;
+  --font-marker: var(--font-permanent-marker), "Comic Sans MS", cursive;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Film grain: one small tiled SVG, rasterised once. Cheap and never intercepts clicks. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.11;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.14 0 0 0 0 0.13 0 0 0 0 0.12 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@layer components {
+  .h-display {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.05;
+  }
+  .eyebrow {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.72rem;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.8rem 1.6rem;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.8rem;
+    border-radius: 3px;
+    transition: background-color 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .btn-red {
+    background: var(--color-red);
+    color: var(--color-paper);
+    box-shadow: 3px 3px 0 var(--color-ink);
+  }
+  .btn-red:hover:not(:disabled) {
+    background: var(--color-red-deep);
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0 var(--color-ink);
+  }
+  .btn-outline {
+    border: 2px solid currentColor;
+  }
+  .btn-outline:hover:not(:disabled) {
+    background: var(--color-ink);
+    color: var(--color-bone);
+    border-color: var(--color-ink);
+  }
+  .link {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-red);
+  }
+  .link:hover {
+    color: var(--color-red-deep);
+  }
+  .container-x {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-x {
+      padding-inline: 2.5rem;
+    }
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-navy);
+  outline-offset: 2px;
+}
+
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+details[open] > summary .acc-icon {
+  transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
