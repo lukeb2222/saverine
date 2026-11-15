@@ -2,6 +2,14 @@
 
 import { useState } from "react";
 
+/**
+ * Where signups are sent. The built-in /api/subscribe route needs a server,
+ * so static hosting (GitHub Pages) must set NEXT_PUBLIC_SIGNUP_ENDPOINT to a
+ * form/webhook URL that accepts a JSON POST from the browser.
+ */
+const ENDPOINT =
+  process.env.NEXT_PUBLIC_SIGNUP_ENDPOINT || (process.env.NEXT_PUBLIC_STATIC_EXPORT === "1" ? "" : "/api/subscribe");
+
 export function SignupForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -10,9 +18,14 @@ export function SignupForm() {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
+    if (!ENDPOINT) {
+      setStatus("error");
+      setMessage("Signups aren't switched on yet. Check back soon.");
+      return;
+    }
     setStatus("sending");
     try {
-      const res = await fetch("/api/subscribe", {
+      const res = await fetch(ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: data.get("email"), company: data.get("company") }),

@@ -32,4 +32,6 @@ Open http://localhost:3000.
 
 ## Deploy
 
-Any Next.js host works (Vercel is the simplest). Set the variables from `.env.example`.
+**GitHub Pages (set up):** every push to `main` runs `.github/workflows/pages.yml`, which builds a static copy and publishes it. One-time step: repo Settings → Pages → Source → **GitHub Actions**. Static hosting has no server, so email signup needs a repository variable `SIGNUP_ENDPOINT` (Settings → Secrets and variables → Actions → Variables) holding a form/webhook URL that accepts a JSON POST from the browser.
+
+**Netlify / Vercel:** import the repo; no config needed. These run the full app, including `/api/subscribe`. Set the variables from `.env.example`.

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { site } from "@/data/site";
 import type { Colorway, Product } from "@/data/products";
 import { Mockup, type MockupView } from "./Mockup";
 
@@ -21,7 +22,7 @@ export function ProductVisual({
   if (preferPhoto && colorway.photo && view === "front") {
     return (
       <Image
-        src={colorway.photo.src}
+        src={`${site.basePath}${colorway.photo.src}`}
         alt={colorway.photo.alt}
         width={colorway.photo.width}
         height={colorway.photo.height}

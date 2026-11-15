@@ -9,7 +9,7 @@ import { RoughEdge } from "@/components/RoughEdge";
 import { CityScene, CoastScene, MountainScene } from "@/components/Scenes";
 import { SignupForm } from "@/components/SignupForm";
 
-const HERO = "/images/good-days-tee-olive-tree.jpg";
+const HERO = `${site.basePath}/images/good-days-tee-olive-tree.jpg`;
 
 export default function Home() {
   return (

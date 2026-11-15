@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: site.description,
     siteName: site.name,
     type: "website",
-    images: [{ url: "/images/good-days-tee-olive-tree.jpg", width: 896, height: 1200 }],
+    images: [{ url: `${site.url}/images/good-days-tee-olive-tree.jpg`, width: 896, height: 1200 }],
   },
   twitter: { card: "summary_large_image" },
 };

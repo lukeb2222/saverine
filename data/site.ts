@@ -9,6 +9,8 @@ export const site = {
     "Saverine is garment-dyed, lived-in clothing made for good days, wherever you are. First drop available for preorder now.",
   /** Public URL of the live site (used for SEO + share links). */
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  /** Sub-path the site is served from ("" unless hosted at example.com/something). */
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? "",
 
   preorder: {
     dropName: "First drop",
