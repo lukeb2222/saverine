@@ -1,0 +1,10 @@
+{
+  "name": "saverine-support-api",
+  "private": true,
+  "type": "module",
+  "description": "Serverless proxy between the Saverine support chat and the xAI API. Deployed separately (Vercel, root directory support-api).",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "dev": "node dev-server.js"
+  }
+}

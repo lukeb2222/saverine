@@ -29,7 +29,7 @@ jobs:
       # Question set for the support chat; fails the deploy if answers regress.
       - run: npm run test:support
       # Server routes can't run on static hosting; signup uses NEXT_PUBLIC_SIGNUP_ENDPOINT instead.
-      - run: rm -rf app/api
+      - run: rm -rf app/api support-api
       - run: npm run build
         env:
           STATIC_EXPORT: "1"
@@ -37,6 +37,9 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
           NEXT_PUBLIC_SIGNUP_ENDPOINT: ${{ vars.SIGNUP_ENDPOINT }}
+          # Full URL of the AI support proxy (support-api/ on Vercel), e.g. https://<project>.vercel.app/api/chat.
+          # Unset = the chat uses the built-in keyword matcher.
+          NEXT_PUBLIC_SUPPORT_API_URL: ${{ vars.SUPPORT_API_URL }}
       - run: touch out/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

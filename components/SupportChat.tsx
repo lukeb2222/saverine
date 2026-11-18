@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode } from "react";
 import { site } from "@/data/site";
-import { answer, GREETING, SUGGESTED_QUESTIONS, supportMailto, type ChatLink } from "@/lib/support";
+import { GREETING, SUGGESTED_QUESTIONS, supportMailto, type ChatLink } from "@/lib/support";
+import { getReply, type ChatTurn } from "@/lib/supportClient";
 
-type Msg = { id: number; from: "you" | "bot"; text: string; links?: ChatLink[]; handoff?: boolean };
+type Msg = { id: number; from: "you" | "bot"; text: string; links?: ChatLink[]; handoff?: boolean; source?: "ai" | "local" };
 
 /** Chat history lives in sessionStorage only: it's gone when the tab closes. */
 const KEY = "saverine-support-v1";
@@ -29,6 +30,7 @@ export function SupportChat() {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[] | null>(null);
   const [draft, setDraft] = useState("");
+  const [pending, setPending] = useState(false);
   const panelId = useId();
   const titleId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -49,7 +51,7 @@ export function SupportChat() {
   useEffect(() => {
     const el = logRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [msgs, open]);
+  }, [msgs, open, pending]);
 
   const toggle = () => {
     if (!open && msgs === null) setMsgs(loadHistory());
@@ -57,25 +59,29 @@ export function SupportChat() {
   };
   const close = () => setOpen(false);
 
-  const ask = (question: string) => {
-    const q = question.trim().slice(0, 500);
-    if (!q) return;
-    const r = answer(q);
-    const base = history.length ? history[history.length - 1].id + 1 : 1;
-    const next: Msg[] = [
-      ...history,
-      { id: base, from: "you", text: q },
-      { id: base + 1, from: "bot", text: r.text, links: r.links, handoff: r.handoff },
-    ];
+  const ask = async (question: string) => {
+    const q = question.trim().slice(0, 1000);
+    if (!q || pending) return;
+    const before = history;
+    const base = before.length ? before[before.length - 1].id + 1 : 1;
+    const withQuestion: Msg[] = [...before, { id: base, from: "you", text: q }];
+    setMsgs(withQuestion);
+    saveHistory(withQuestion);
+    setDraft("");
+    setPending(true);
+    inputRef.current?.focus();
+    // Earlier turns go along so the AI can follow up ("what colors does that come in?").
+    const turns: ChatTurn[] = before.map((m) => ({ role: m.from === "you" ? "user" : "assistant", content: m.text }));
+    const r = await getReply(turns, q);
+    const next: Msg[] = [...withQuestion, { id: base + 1, from: "bot", text: r.text, links: r.links, handoff: r.handoff, source: r.source }];
     setMsgs(next);
     saveHistory(next);
-    setDraft("");
-    inputRef.current?.focus();
+    setPending(false);
   };
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    ask(draft);
+    void ask(draft);
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -110,7 +116,7 @@ export function SupportChat() {
               <h2 id={titleId} className="h-display text-sm">
                 {site.name} help
               </h2>
-              <p className="text-xs text-bone/70">Instant answers from our FAQ. Real people by email.</p>
+              <p className="text-xs text-bone/70">Instant answers. Real people by email.</p>
             </div>
             <div className="flex items-center gap-1">
               {history.length > 0 && (
@@ -137,7 +143,7 @@ export function SupportChat() {
                   <button
                     key={q}
                     type="button"
-                    onClick={() => ask(q)}
+                    onClick={() => void ask(q)}
                     className="cursor-pointer rounded-full border-2 border-ink/70 bg-paper px-3 py-1.5 text-left text-sm hover:border-ink hover:bg-ink hover:text-bone"
                   >
                     {q}
@@ -165,6 +171,16 @@ export function SupportChat() {
                 </BotBubble>
               ),
             )}
+            {pending && (
+              <div className="w-fit rounded-[3px] border-2 border-ink/15 bg-paper px-3 py-2.5" role="status">
+                <span className="sr-only">{site.name} bot is typing…</span>
+                <span aria-hidden="true" className="typing-dots flex gap-1">
+                  <span />
+                  <span />
+                  <span />
+                </span>
+              </div>
+            )}
           </div>
 
           <form onSubmit={onSubmit} className="flex gap-2 border-t-2 border-ink/15 bg-paper p-3">
@@ -176,13 +192,13 @@ export function SupportChat() {
               id={`${panelId}-input`}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              maxLength={500}
+              maxLength={1000}
               autoComplete="off"
               enterKeyHint="send"
               placeholder="Ask about sizing, shipping, refunds…"
               className="min-w-0 flex-1 rounded-[3px] border-2 border-ink/30 bg-bone px-3 py-2 text-base focus:border-ink sm:text-sm"
             />
-            <button type="submit" className="btn btn-red min-h-0 px-4 py-2" disabled={!draft.trim()}>
+            <button type="submit" className="btn btn-red min-h-0 px-4 py-2" disabled={!draft.trim() || pending}>
               Send
             </button>
           </form>
@@ -233,7 +249,7 @@ function BotBubble({
     <div className="max-w-[92%] rounded-[3px] border-2 border-ink/15 bg-paper px-3 py-2 text-sm">
       <p className="whitespace-pre-line">
         <span className="sr-only">{site.name} bot: </span>
-        {text}
+        <RichText text={text} onNavigate={onNavigate} />
       </p>
       {links && links.length > 0 && (
         <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
@@ -255,4 +271,41 @@ function BotBubble({
       {children}
     </div>
   );
+}
+
+const SITE_HOSTS = new Set(["saverine.shop", "www.saverine.shop"]);
+const TOKEN = /\[([^\]\n]{1,80})\]\(((?:https?:\/\/|\/)[^)\s]*)\)|(https?:\/\/[^\s)]+[^\s).,!?])/g;
+
+/**
+ * Renders reply text with [label](href) and bare URLs as links. Site paths use
+ * Next Link (basePath-aware); other sites open in a new tab. Everything else is
+ * plain text, so nothing from the API is ever injected as HTML.
+ */
+function RichText({ text, onNavigate }: { text: string; onNavigate?: () => void }) {
+  const clean = text.replace(/\*\*(.+?)\*\*/g, "$1").replace(/^#+\s+/gm, "");
+  const out: ReactNode[] = [];
+  let last = 0;
+  for (const m of clean.matchAll(TOKEN)) {
+    if (m.index > last) out.push(clean.slice(last, m.index));
+    const label = m[1] ?? m[3];
+    let href = m[2] ?? m[3];
+    try {
+      const u = new URL(href, "https://saverine.shop");
+      if (SITE_HOSTS.has(u.hostname)) href = `${u.pathname}${u.hash}`;
+    } catch {}
+    out.push(
+      href.startsWith("/") ? (
+        <Link key={m.index} href={href} onClick={onNavigate} className="link font-semibold">
+          {label}
+        </Link>
+      ) : (
+        <a key={m.index} href={href} target="_blank" rel="noopener noreferrer" className="link font-semibold">
+          {label}
+        </a>
+      ),
+    );
+    last = m.index + m[0].length;
+  }
+  if (last < clean.length) out.push(clean.slice(last));
+  return <>{out}</>;
 }

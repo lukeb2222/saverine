@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:support": "tsx test/support.test.ts"
+    "test:support": "tsx test/support.test.ts && tsx test/supportClient.test.mts && tsx test/supportKnowledge.test.mts",
+    "support:knowledge": "tsx scripts/build-support-knowledge.ts"
   },
   "dependencies": {
     "next": "16.4.6",

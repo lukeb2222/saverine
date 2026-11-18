@@ -813,7 +813,7 @@ export function supportMailto(transcript: { from: "you" | "bot"; text: string }[
   const subject = `${site.name} support question`;
   const convo = transcript
     .slice(-12)
-    .map((m) => `${m.from === "you" ? "Me" : `${site.name} bot`}: ${m.text}`)
+    .map((m) => `${m.from === "you" ? "Me" : `${site.name} bot`}: ${m.text.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, "$1 ($2)").replace(/\*\*/g, "")}`)
     .join("\n\n");
   let body = `Hi ${site.name},\n\n[Add your question or order number here]\n\n--- Chat so far ---\n${convo}`;
   if (body.length > 1800) body = `${body.slice(0, 1800)}…`;

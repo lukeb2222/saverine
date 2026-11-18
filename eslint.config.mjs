@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Separate serverless project (deployed on its own, not part of the site build).
+    "support-api/**",
   ]),
 ]);
 
