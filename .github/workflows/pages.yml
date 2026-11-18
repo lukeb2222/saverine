@@ -26,6 +26,8 @@ jobs:
       - id: pages
         uses: actions/configure-pages@v5
       - run: npm ci
+      # Question set for the support chat; fails the deploy if answers regress.
+      - run: npm run test:support
       # Server routes can't run on static hosting; signup uses NEXT_PUBLIC_SIGNUP_ENDPOINT instead.
       - run: rm -rf app/api
       - run: npm run build
