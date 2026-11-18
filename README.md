@@ -24,6 +24,10 @@ Open http://localhost:3000.
 
 **Drop 2 colorways:** colorways with `drop: 2` show as "coming in drop 2" and can't be added to the cart. Remove the flag (or raise `CURRENT_DROP`) to open them.
 
+## Support chat
+
+A **Help** button (bottom-right, every page) opens a support chat (`components/SupportChat.tsx`, answers in `lib/support.ts`). It runs entirely in the browser: answers are built at build time from `data/faq.ts`, `data/sizeGuide.ts`, `data/products.ts` and `data/site.ts`, so editing those files updates the chat too. When it isn't confident, or someone asks for a person or about a specific order, it offers a prefilled email to `contactEmail` (with the chat so far) and a link to `/contact`. Chat history is kept in `sessionStorage` only. It is keyword matching, not an AI model: a live AI agent would need a hosted backend (e.g. a serverless function) holding the model API key, because GitHub Pages is static and any key shipped to the browser would be public.
+
 ## Not connected yet
 
 - **Checkout** shows "coming soon". The cart works and is saved in the browser. Shopify plugs in at `lib/checkout.ts` — the steps are written at the top of that file.
