@@ -6,6 +6,7 @@ import { PreorderBanner } from "@/components/PreorderBanner";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CartDrawer } from "@/components/CartDrawer";
+import { SupportChat } from "@/components/SupportChat";
 
 const marker = Permanent_Marker({ weight: "400", subsets: ["latin"], variable: "--font-permanent-marker", display: "swap" });
 const archivo = Archivo_Black({ weight: "400", subsets: ["latin"], variable: "--font-archivo-black", display: "swap" });
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <CartDrawer />
+        <SupportChat />
       </body>
     </html>
   );
