@@ -239,9 +239,15 @@ function BotBubble({
         <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
           {links.map((l) => (
             <li key={l.href + l.label}>
-              <Link href={l.href} onClick={onNavigate} className="link font-semibold">
-                {l.label} →
-              </Link>
+              {/^https?:\/\//.test(l.href) ? (
+                <a href={l.href} target="_blank" rel="noopener noreferrer" className="link font-semibold">
+                  {l.label} ↗
+                </a>
+              ) : (
+                <Link href={l.href} onClick={onNavigate} className="link font-semibold">
+                  {l.label} →
+                </Link>
+              )}
             </li>
           ))}
         </ul>

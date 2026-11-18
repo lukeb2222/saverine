@@ -39,7 +39,7 @@ export default function Home() {
               <span style={{ "--d": "900ms" } as React.CSSProperties} className="h-display anim-rise mt-4 block text-3xl sm:mt-5 sm:text-5xl">Good Days Only</span>
             </h1>
             <p style={{ "--d": "1050ms" } as React.CSSProperties} className="anim-rise mt-4 hidden max-w-md text-lg text-bone/85 sm:block">
-              Sun-faded, garment-dyed and very soft. Made for the coast, worn everywhere else too.
+              {site.about.heroLine}
             </p>
             <div style={{ "--d": "1200ms" } as React.CSSProperties} className="anim-rise mt-6 flex flex-wrap items-center gap-5 sm:mt-8">
               <Link href="/#drop" className="btn btn-red">
@@ -61,7 +61,7 @@ export default function Home() {
             <h2 className="h-display mt-2 text-4xl md:text-5xl">The Drop</h2>
           </div>
           <p className="max-w-sm text-ink/80">
-            Two pieces, made to order. Preorder closes {site.preorder.closesLabel}; everything ships by {site.preorder.shipsBy}.
+            {site.about.dropIntro} Preorder closes {site.preorder.closesLabel}; everything ships by {site.preorder.shipsBy}.
           </p>
         </div>
         <div className="mt-10 grid gap-x-8 gap-y-14 md:grid-cols-2">
@@ -108,12 +108,9 @@ export default function Home() {
           <Badge className="mx-auto h-44 w-44 text-ink md:h-56 md:w-56" sun="#B8483A" />
           <div className="max-w-2xl">
             <p className="eyebrow text-red">The story</p>
-            <h2 className="h-display mt-2 text-3xl md:text-4xl">Made for good days</h2>
+            <h2 className="h-display mt-2 text-3xl md:text-4xl">{site.about.storyTitle}</h2>
             <p className="mt-5 text-lg leading-relaxed text-ink/90">
-              Saverine started with a simple idea: the best days deserve clothes that feel like them. So we make soft,
-              sun-faded pieces that look like they&rsquo;ve already been on a few road trips. Wear them to the beach, on
-              the subway, up the chairlift or four hours into a drive with the windows down. Wherever you are, if
-              it&rsquo;s a good day, you&rsquo;re dressed for it.
+              {site.about.story}
             </p>
             <p className="mt-5 font-marker text-2xl">{site.tagline}</p>
           </div>
@@ -127,7 +124,7 @@ export default function Home() {
           <div>
             <h2 className="h-display text-3xl md:text-4xl">Get first dibs on drop 2</h2>
             <p className="mt-3 max-w-md text-bone/80">
-              New colorways are on deck. Get on the list and you&rsquo;ll hear before anyone else.
+              {site.about.nextDropPitch}
             </p>
           </div>
           <SignupForm />

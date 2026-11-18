@@ -13,7 +13,7 @@ Open http://localhost:3000.
 
 | What | File |
 | --- | --- |
-| Preorder close date, ship month, shipping, refund text, socials, contact email | `data/site.ts` |
+| Preorder close date, ship month, shipping, refund text, socials, contact email, homepage/about copy | `data/site.ts` |
 | Products, prices, colorways, which drop a colorway is in, product photos | `data/products.ts` |
 | Size charts (inches) | `data/sizeGuide.ts` |
 | FAQ copy | `data/faq.ts` |
@@ -26,7 +26,7 @@ Open http://localhost:3000.
 
 ## Support chat
 
-A **Help** button (bottom-right, every page) opens a support chat (`components/SupportChat.tsx`, answers in `lib/support.ts`). It runs entirely in the browser: answers are built at build time from `data/faq.ts`, `data/sizeGuide.ts`, `data/products.ts` and `data/site.ts`, so editing those files updates the chat too. When it isn't confident, or someone asks for a person or about a specific order, it offers a prefilled email to `contactEmail` (with the chat so far) and a link to `/contact`. Chat history is kept in `sessionStorage` only. It is keyword matching, not an AI model: a live AI agent would need a hosted backend (e.g. a serverless function) holding the model API key, because GitHub Pages is static and any key shipped to the browser would be public.
+A **Help** button (bottom-right, every page) opens a support chat (`components/SupportChat.tsx`, answers in `lib/support.ts`). It runs entirely in the browser: answers are built at build time from `data/faq.ts`, `data/sizeGuide.ts`, `data/products.ts` and `data/site.ts`, so editing those files updates the chat too. When it isn't confident, or someone asks for a person or about a specific order, it offers a prefilled email to `contactEmail` (with the chat so far) and a link to `/contact`. Chat history is kept in `sessionStorage` only. Brand answers ("What is Saverine?") use the `about` block in `data/site.ts`, which is also the homepage copy. `npm run test:support` runs 100+ realistic shopper questions against the chat; add a case there when you add data the chat should know. It is keyword matching, not an AI model: a live AI agent would need a hosted backend (e.g. a serverless function) holding the model API key, because GitHub Pages is static and any key shipped to the browser would be public.
 
 ## Not connected yet
 

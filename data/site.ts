@@ -22,6 +22,23 @@ export const site = {
     shipsBy: "March 2027",
   },
 
+  /**
+   * Brand copy. Shown on the homepage and used by the support chat
+   * (lib/support.ts) to answer "what is Saverine?" style questions.
+   */
+  about: {
+    /** Homepage hero line. */
+    heroLine: "Sun-faded, garment-dyed and very soft. Made for the coast, worn everywhere else too.",
+    /** "The story" section on the homepage. */
+    storyTitle: "Made for good days",
+    story:
+      "Saverine started with a simple idea: the best days deserve clothes that feel like them. So we make soft, sun-faded pieces that look like they’ve already been on a few road trips. Wear them to the beach, on the subway, up the chairlift or four hours into a drive with the windows down. Wherever you are, if it’s a good day, you’re dressed for it.",
+    /** Intro line above the products in "The Drop". */
+    dropIntro: "Two pieces, made to order.",
+    /** Drop 2 signup pitch. */
+    nextDropPitch: "New colorways are on deck. Get on the list and you’ll hear before anyone else.",
+  },
+
   /** Editable policy copy, reused on the FAQ, product pages and checkout. */
   refundPolicy:
     "Changed your mind? Email us any time before production starts and we'll refund you in full, no questions asked. Once production starts, your pieces are being made for you and the order is locked in.",
